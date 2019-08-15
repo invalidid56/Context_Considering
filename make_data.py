@@ -11,7 +11,7 @@ def main():
     with open('config.json') as conf:
         config = json.load(conf)
         DATA_HOME = config['DATA_HOME']
-        EX_HOME = config['EX_HOME']
+        EX_HOME = sys.argv[1]
         SHEET = config['SHEET']
     COPORA = [os.path.join(DATA_HOME, corpus) for corpus in SHEET]
 
@@ -44,7 +44,7 @@ def main():
     os.makedirs(os.path.join(EX_HOME, 'tmp'))
     for i, corpus in enumerate(COPORA):
         with open(os.path.join(EX_HOME, 'tmp', 'process_'+str(i)+'.bin'), 'wb') as f:
-            gen = make_gen(os.path.join(DATA_HOME, COPORA))
+            gen = make_gen(os.path.join(DATA_HOME, corpus))
             for line in gen:
                 pickle.dump(line, f)
 
