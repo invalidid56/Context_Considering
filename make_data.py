@@ -4,25 +4,18 @@ from konlpy.tag import Okt
 import sys
 import os
 import pickle
+import json
 
 def main():
     tag = Okt()
-    DATA_HOME, EX_HOME, SHEET_HOME = sys.argv[1:3]
+    with open('config.json') as conf:
+        config = json.load(conf)
+        DATA_HOME = config['DATA_HOME']
+        EX_HOME = config['EX_HOME']
+        SHEET = config['SHEET']
+    COPORA = [os.path.join(DATA_HOME, corpus) for corpus in SHEET]
 
-
-    # 데이터 체크, else 다운로드 
-
-    # 시트에서 각 실험군 코퍼스 정보 불러오기
-    if not os.path.exists(os.path.join(SHEET_HOME, 'sheet')):
-        print('ERROR: CANNOT READ SHEET')
-        sys.exit(9)
-    else:
-        with open(os.path.join(SHEET_HOME, 'sheet')) as f:
-            copora = []
-            while True:
-                if not f.readline():
-                    break
-                copora.append(f.readline())
+    # 데이터 체크, else 다운로드
 
     # 각 실험군별로 전처리된 하나의 코퍼스 만들기
     def make_gen(filedir):
@@ -49,8 +42,11 @@ def main():
 
     # EXHOME 아래 TMPDIR에 저장
     os.makedirs(os.path.join(EX_HOME, 'tmp'))
-    for i, corpus in enumerate(copora):
+    for i, corpus in enumerate(COPORA):
         with open(os.path.join(EX_HOME, 'tmp', 'process_'+str(i)+'.bin'), 'wb') as f:
-            gen = make_gen(os.path.join(DATA_HOME, corpus))
+            gen = make_gen(os.path.join(DATA_HOME, COPORA))
             for line in gen:
                 pickle.dump(line, f)
+
+if __name__ == '__main__':
+    main()
