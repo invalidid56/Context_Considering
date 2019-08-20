@@ -19,7 +19,7 @@ def main():
 
     # 각 실험군별로 전처리된 하나의 코퍼스 만들기
     def make_gen(filedir):
-        with open(os.path.join(DATA_HOME, filedir), 'rb'):
+        with open(os.path.join(DATA_HOME, filedir), 'rb') as f:
             while True:
                 line = f.readline()
                 try:
@@ -34,7 +34,7 @@ def main():
                     break
                 line = line.replace('\r\n', '').replace('\n', '')
                 if not (line.startswith('<') or line == ''):
-                    line = mor.morphs(line)
+                    line = tag.morphs(line)
                     if not line == []:
                         yield line
                     else:
@@ -42,11 +42,13 @@ def main():
 
     # EXHOME 아래 TMPDIR에 저장
     os.makedirs(os.path.join(EX_HOME, 'tmp'))
-    for i, corpus in enumerate(COPORA):
-        with open(os.path.join(EX_HOME, 'tmp', 'process_'+str(i)+'.bin'), 'wb') as f:
-            gen = make_gen(os.path.join(DATA_HOME, corpus))
-            for line in gen:
-                pickle.dump(line, f)
+    for i, cor in enumerate(COPORA):
+        corpus = os.listdir(cor)
+        gens = [make_gen(os.path.join(DATA_HOME, cor, files)) for files in corpus]
+        with open(os.path.join(EX_HOME, 'tmp', 'process_'+str(i))+'bin', 'wb') as f:
+            for gen in gens:
+                for line in gen:
+                    pickle.dump(line, f)
 
 if __name__ == '__main__':
     main()
