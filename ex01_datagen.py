@@ -1,5 +1,3 @@
-# 데이터 체크, 다운로드, 전처리, $EX_HOME/(실험번호)/tmpdir에 저장
-
 from konlpy.tag import Okt
 import sys
 import os
@@ -7,17 +5,29 @@ import pickle
 import json
 
 def main():
+    # 로그 설정
+    logger = logging.getLogger(__name__)
+    log_file = os.path.join(ex_path, 'ex0' + str(experiment), 'ex_log.log')
+    formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
+    filehandler = logging.FileHandler(log_file)
+    logger.addHandler(filehandler)
+    logger.setLevel(level=logging.DEBUG)
+
+    # 포스태거 인스턴스 생성
     tag = Okt()
-    with open('config.json') as conf:
+
+    # 설정 파일 파싱
+    with open('config_ex01.json') as conf:
         config = json.load(conf)
         DATA_HOME = config['DATA_HOME']
-        EX_HOME = sys.argv[1]
+        EX_HOME = os.path.join(config['EX_HOME'], 'ex01')
         SHEET = config['SHEET']
     COPORA = [os.path.join(DATA_HOME, corpus) for corpus in SHEET]
+    log.info('Reading Configuration')
 
-    # 데이터 체크, else 다운로드
+    # TODO: 데이터 체크
 
-    # 각 실험군별로 전처리된 하나의 코퍼스 만들기
+    # 코퍼스 생성 함수 정의
     def make_gen(filedir):
         with open(os.path.join(DATA_HOME, filedir), 'rb') as f:
             while True:
@@ -40,8 +50,11 @@ def main():
                     else:
                         continue
 
-    # EXHOME 아래 TMPDIR에 저장
-    os.makedirs(os.path.join(EX_HOME, 'tmp'))
+    # 임시데이터 저장 디렉터리 생성
+    os.makedirs(os.path.join(EX_HOME, 'tmp_data'))
+    log.info('Tmpdir Created at '+EX_HOME+'/tmp_data')
+
+    # 디렉터리에서 코퍼스 읽어서 임시데이터 생성
     for i, cor in enumerate(COPORA):
         corpus = os.listdir(cor)
         gens = [make_gen(os.path.join(DATA_HOME, cor, files)) for files in corpus]
@@ -49,6 +62,7 @@ def main():
             for gen in gens:
                 for line in gen:
                     pickle.dump(line, f)
+            log.info('Temp File Created '+'process_'+str(i)+'.bin')
 
 if __name__ == '__main__':
     main()
