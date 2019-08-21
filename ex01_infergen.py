@@ -6,29 +6,35 @@
 '''
 # 대명사 의미|  맥락분리시 단어일관성, 맥락통합 단어일관성 비교
 
-from gensim.models import Word2Vec
-from sklearn.manifold import TSNE
-
+import json
+import os
+import logging
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
 import pandas as pd
-
-import json
-import sys
-import os
+from gensim.models import Word2Vec
+from sklearn.manifold import TSNE
 from matplotlib import font_manager, rc
 
 
 def main():
+
     font_name = font_manager.FontProperties(fname='/usr/share/fonts/NanumFont/NanumGothic.ttf').get_name() # TODO: Font Dependency
     rc('font', family=font_name)
-    matplotlib.rcParams['axes.unicode_minus'] = False
+    mpl.rcParams['axes.unicode_minus'] = False
 
     with open('config_ex01.json') as jsf:
         config = json.load(jsf)
         targets = config['TARGET']
-    EX_HOME = sys.argv[1]
+        EX_HOME = os.path.join(config['EX_HOME'], 'ex01')
+
+    # 로그 설정
+    logger = logging.getLogger(__name__)
+    log_file = os.path.join(EX_HOME, 'ex_log.log')
+    formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
+    filehandler = logging.FileHandler(log_file)
+    logger.addHandler(filehandler)
+    logger.setLevel(level=logging.DEBUG)
 
     models = ['model_'+str(i) for i in range(5)]
     sample = [Word2Vec.load(os.path.join(EX_HOME, 'tmp_model', file)) for file in models]
@@ -58,10 +64,10 @@ def main():
 
     for i, model in enumerate(sample):
         output = 'result_'+str(i)
-        infer_data(sample, targets)
+        infer_data(model, targets)
         with open(os.path.join(EX_HOME, output+'.txt'), 'w') as f:
-            f.write(infer_data(model, targets))
-        fig = draw_plt(model)
+            f.write('\n\n'.join(infer_data(model, targets)))
+        fig = draw_plt(model)   # TODO: 한글
         fig.savefig(os.path.join(EX_HOME, output+'.png'))
 
 if __name__ == '__main__':

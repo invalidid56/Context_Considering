@@ -5,8 +5,6 @@ import logging
 import logging.handlers
 from collections import OrderedDict
 
-# Make Configuration File
-
 
 def main():
     experiment = int(sys.argv[1])
@@ -23,7 +21,7 @@ def main():
 
     if experiment == 1:  # EX_01
         ex_path = input('Import Path To Save Experiment Data : ').replace('~', os.path.expanduser('~'))
-        config["EX_HOME"] = ex_path  # ex/path_ex01?
+        config["EX_HOME"] = ex_path
         data_path = input('Import Path To Read/Download Corpus: ').replace('~', os.path.expanduser('~'))
         config["DATA_HOME"] = data_path
         sheet = [input('Import Path To Read Copora No.' + str(i) + ' (Op. Path): ') for i in range(5)]
@@ -43,6 +41,7 @@ def main():
 
     logger = logging.getLogger(__name__)
     log_file = os.path.join(ex_path, 'ex0' + str(experiment), 'ex_log.log')
+    os.makedirs(os.path.join(ex_path, 'ex0'+str(experiment)))
     formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
     filehandler = logging.FileHandler(log_file)
     logger.addHandler(filehandler)
@@ -53,3 +52,6 @@ def main():
 
     logger.debug('Configuration File Created')
 
+
+if __name__ == '__main__':
+    main()
