@@ -67,7 +67,7 @@ def main():
         infer_data(model, targets)
         with open(os.path.join(EX_HOME, output+'.txt'), 'w') as f:
             f.write('\n\n'.join(infer_data(model, targets)))
-        fig = draw_plt(model)   # TODO: 한글
+        fig = draw_plt(model)
         fig.savefig(os.path.join(EX_HOME, output+'.png'))
 
 if __name__ == '__main__':

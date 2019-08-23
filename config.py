@@ -30,7 +30,12 @@ def main():
         config["TARGET"] = target
 
     elif experiment == 2:
-        pass
+        ex_path = input('Import Path To Save Experiment Data : ').replace('~', os.path.expanduser('~'))
+        config["EX_HOME"] = ex_path
+        config["DATA_HOME"] = input('Import Path To Read/Download Corpus: ').replace('~', os.path.expanduser('~'))
+        config["CLUSTER"] = input('Import Number of Clusters to Make :')
+        sheet = [input('Import Path To Read Copora No.' + str(i) + ' (Op. Path): ') for i in range(5)]
+        config["SHEET"] = sheet
 
     elif experiment == 3:
         pass
