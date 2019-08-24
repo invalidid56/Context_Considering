@@ -9,12 +9,17 @@ from collections import OrderedDict
 def main():
     experiment = int(sys.argv[1])
     config_file = 'config_ex0' + str(experiment) + '.json'
+    project_name = {
+        1: 'ex01_wv_visualize_cluster',
+        2: 'ex02_document_cluster',
+        3: 'ex03_attention_classifier'
+    }
 
-    if not os.path.exists(os.path.join(os.getcwd(), config_file)):
+    if not os.path.exists(os.path.join(os.getcwd(), project_name[experiment], config_file)):
         print('Configuration not Detected, Creating...')
     else:
         print('Deleting Previous Configuration')
-        os.remove(os.path.join(os.getcwd(), config_file))
+        os.remove(os.path.join(os.getcwd(), project_name[experiment], config_file))
 
     print('Input Blank if You Want to Edit Configuration Later.')
     config = OrderedDict()
@@ -38,8 +43,9 @@ def main():
         config["SHEET"] = sheet
 
     elif experiment == 3:
-        pass
-
+        ex_path = input('Import Path To Save Experiment Data : ').replace('~', os.path.expanduser('~'))
+        config["EX_HOME"] = ex_path
+        config["DATA_HOME"] = input('Import Path To Read/Download Corpus: ').replace('~', os.path.expanduser('~'))
     else:
         # TODO: Raise Err
         pass
@@ -52,7 +58,7 @@ def main():
     logger.addHandler(filehandler)
     logger.setLevel(level=logging.DEBUG)
 
-    with open(config_file, 'w', encoding='utf-8') as f:
+    with open(os.path.join(os.getcwd(), project_name[experiment], config_file), 'w', encoding='utf-8') as f:
         json.dump(config, f, ensure_ascii=False, indent='\t')
 
     logger.debug('Configuration File Created')
