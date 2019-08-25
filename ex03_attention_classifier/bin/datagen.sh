@@ -25,7 +25,7 @@ if [ $FILECNT = 0 ] ; then
       --tmp_dir=$TMP_DIR \
       --problem=$PROBLEM
 
-    echo '>>>> End Datagen for Training.'
+    echo '>>>> End Datagen for Training.'   # data_dir 아래에 만들어지나?
 else
     echo '>>>> Dataset files are already exist in target dir. Check and try datagen again.'
 fi

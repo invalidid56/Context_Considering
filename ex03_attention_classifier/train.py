@@ -1,7 +1,7 @@
-import ex03_register
-from tensor2tensor.bin import t2t_trainer
+import register
 import tensorflow as tf
 import logging
+from tensor2tensor.bin import t2t_trainer
 
 
 def main(argv):

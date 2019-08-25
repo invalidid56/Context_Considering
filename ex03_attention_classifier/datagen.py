@@ -6,7 +6,7 @@ from __future__ import print_function
 import tensorflow as tf
 from tensor2tensor.bin import t2t_datagen
 import logging
-import ex03_register
+import register
 
 
 def main(argv):
