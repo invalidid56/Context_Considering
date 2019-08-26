@@ -21,5 +21,5 @@ else
     mkdir -p ${EX_HOME}
 
     # 임시데이터 생성
-    python ex02_datagen.py
+    python datagen.py
 fi

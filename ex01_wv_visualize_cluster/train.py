@@ -3,6 +3,7 @@ import sys
 import pickle
 import json
 import logging
+import logging.handlers
 from gensim.models.word2vec import Word2Vec
 
 
@@ -19,6 +20,7 @@ def main():
     log_file = os.path.join(EX_HOME, 'ex_log.log')
     formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
     filehandler = logging.FileHandler(log_file)
+    filehandler.setFormatter(formatter)
     logger.addHandler(filehandler)
     logger.setLevel(level=logging.DEBUG)
 
@@ -36,6 +38,7 @@ def main():
         return model
 
     # 모델 훈련 후 저장
+    os.makedirs(os.path.join(EX_HOME, 'tmp_model'))
     for i, corpus in enumerate(corpus_list):
         wv = make_wv(os.path.join(EX_HOME, 'tmp_data', corpus))
         wv.save(os.path.join(EX_HOME, 'tmp_model', 'model_'+str(i)))

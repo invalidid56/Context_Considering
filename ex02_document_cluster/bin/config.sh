@@ -3,5 +3,5 @@
 cd ..
 BASEDIR=$(pwd)
 cd ..
-python config.py 3
+python config.py 2
 cd ${BASEDIR}

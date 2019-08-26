@@ -11,11 +11,12 @@ EX_HOME=$(cat config_ex03.json | jq .EX_HOME)
 EX_HOME=${EX_HOME:1:-1}
 
 DATA_DIR=$(cat config_ex03.json | jq .DATA_HOME)
-TMP_DIR=${EX_HOME}/tmp_data
+DATA_DIR=${DATA_DIR:1:-1}
+TMP_DIR=${EX_HOME}/ex03/tmp_data
 
-mkdir -p $DATA_DIR $TMP_DIR $TRAIN_DIR $DATASET_DIR
+mkdir -p $DATA_DIR $TMP_DIR $TRAIN_DIR
 
-FILECNT=$(ls $DATASET_DIR | wc -l)
+FILECNT=$(ls $TMP_DIR | wc -l)
 
 if [ $FILECNT = 0 ] ; then
     echo '>>>> Start Datagen for Training.'
@@ -25,7 +26,10 @@ if [ $FILECNT = 0 ] ; then
       --tmp_dir=$TMP_DIR \
       --problem=$PROBLEM
 
-    echo '>>>> End Datagen for Training.'   # data_dir 아래에 만들어지나?
+    mv $DATA_DIR/$PROBLEM-* ${TMP_DIR}
+    mv $DATA_DIR/vocab* ${TMP_DIR}
+
+    echo '>>>> End Datagen for Training.'
 else
     echo '>>>> Dataset files are already exist in target dir. Check and try datagen again.'
 fi

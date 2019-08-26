@@ -22,4 +22,4 @@ if [ ! -d ${EX_HOME}/ex01/tmp_data ]; then
 fi
 
 # 모델 훈련
-python ex01_train.py
+python train.py

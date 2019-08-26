@@ -19,4 +19,4 @@ if [ ! -d ${EX_HOME}/ex01/tmp_model ]; then
 fi
 
 # 결과 출력
-python ex01_infergen.py
+python infergen.py

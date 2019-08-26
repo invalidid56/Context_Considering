@@ -7,22 +7,34 @@ from tensor2tensor.data_generators import problem
 from tensor2tensor.data_generators import text_problems
 from tensor2tensor.utils import registry
 from tensor2tensor.models.transformer import transformer_base_v1
-from tensor2tensor.models.transformer import transformer_base_v1
 
 
 class Reader(object):
     def __init__(self, file_list, shuffle=True, total=None):
         self.file_list = file_list
         self.total = total  # if not total -> 무제
+        self.tag = Okt()
 
-    def parse(self, file):
-        # JSON 읽어서 라인 딕트로 리턴 -> 제너레이터
-        pass
 
     def generate(self):
-        for file in file_list:
-            pass
-        pass    # JSON 파싱해서 yield
+        breaker = False
+        for file in self.file_list:
+            if breaker:
+                break
+            with open(file, 'r') as f:
+                data = json.load(f)
+                for line in data:
+                    q = line['title'] + ' ' + line['question']
+                    q = ' '.join(self.tag.nouns(q))
+                    a = line['main_category'] + ' ' + ' '.join(line['sub_category'])
+                    a = ' '.join(self.tag.nouns(a))
+                    if self.total:
+                        self.total -= 1
+                        if not self.total:
+                            breaker = True
+                            break
+                    yield {'inputs': q, 'targets': a}
+
 
 @registry.register_hparams('hparam_transformer_t2t')
 def hparam_transformer_t2t():
@@ -52,9 +64,9 @@ class transformer_t2t(text_problems.Text2TextProblem):
         return 2**15
 
     def generate_samples(self, data_dir, tmp_dir, dataset_split):
-        data_file_list = [file for file in os.listdir(data_dir) if file.endswith('.json')]
+        data_file_list = [os.path.join(data_dir, file) for file in os.listdir(data_dir) if file.endswith('.json')]
         div = 'train'
-        # total = 200
+        total = 200
         reader = Reader(
             file_list=data_file_list,
             shuffle=True,

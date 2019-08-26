@@ -10,20 +10,22 @@ BASEDIR=$(pwd)
 EX_HOME=$(cat config_ex03.json | jq .EX_HOME)
 EX_HOME=${EX_HOME:1:-1}
 
-DATA_DIR=$(cat config_ex03.json | jq .DATA_HOME)
-TMP_DIR=${EX_HOME}/tmp_data
+DATA_DIR=${EX_HOME}/ex03/tmp_data
+TMP_DIR=${EX_HOME}/ex03/tmp_model
 
-mkdir -p $DATA_DIR $TMP_DIR $TRAIN_DIR $DATASET_DIR
+mkdir -p  $TMP_DIR
 
-FILECNT=$(ls $DATASET_DIR | wc -l)
+FILECNT=$(ls $TMP_DIR | wc -l)
 
 if [ $FILECNT = 0 ] ; then
     echo '>>>> Start Datagen for Training.'
 
-    python datagen.py \
+    python train.py \
       --data_dir=$DATA_DIR \
-      --tmp_dir=$TMP_DIR \
-      --problem=$PROBLEM
+      --output_dir=$TMP_DIR \
+      --problem=$PROBLEM \
+      --hparams_set=$HPARAMS \
+      --model=$MODEL
 
     echo '>>>> End Datagen for Training.'
 else

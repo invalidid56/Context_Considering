@@ -9,6 +9,7 @@
 import json
 import os
 import logging
+import logging.handlers
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -33,6 +34,7 @@ def main():
     log_file = os.path.join(EX_HOME, 'ex_log.log')
     formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
     filehandler = logging.FileHandler(log_file)
+    filehandler.setFormatter(formatter)
     logger.addHandler(filehandler)
     logger.setLevel(level=logging.DEBUG)
 

@@ -39,7 +39,7 @@ def main():
         config["EX_HOME"] = ex_path
         config["DATA_HOME"] = input('Import Path To Read/Download Corpus: ').replace('~', os.path.expanduser('~'))
         config["CLUSTER"] = input('Import Number of Clusters to Make :')
-        sheet = [input('Import Path To Read Copora No.' + str(i) + ' (Op. Path): ') for i in range(5)]
+        sheet = [input('Import Path To Read Copora No.' + str(i) + ' (Op. Path): ') for i in range(2)]
         config["SHEET"] = sheet
 
     elif experiment == 3:
@@ -55,6 +55,7 @@ def main():
     os.makedirs(os.path.join(ex_path, 'ex0'+str(experiment)))
     formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
     filehandler = logging.FileHandler(log_file)
+    filehandler.setFormatter(formatter)
     logger.addHandler(filehandler)
     logger.setLevel(level=logging.DEBUG)
 

@@ -2,6 +2,7 @@ import os
 import pickle
 import json
 import logging
+import logging.handlers
 from konlpy.tag import Okt
 
 
@@ -22,6 +23,7 @@ def main():
     log_file = os.path.join(EX_HOME, 'ex_log.log')
     formatter = logging.Formatter('[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s')
     filehandler = logging.FileHandler(log_file)
+    filehandler.setFormatter(formatter)
     logger.addHandler(filehandler)
     logger.setLevel(level=logging.DEBUG)
     # TODO: 데이터 체크
@@ -43,7 +45,7 @@ def main():
                     break
                 line = line.replace('\r\n', '').replace('\n', '')
                 if not (line.startswith('<') or line == ''):
-                    line = tag.morphs(line)
+                    line = tag.nouns(line)
                     if not line == []:
                         yield line
                     else:
