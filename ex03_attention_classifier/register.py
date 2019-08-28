@@ -24,7 +24,7 @@ class Reader(object):
             with open(file, 'r') as f:
                 data = json.load(f)
                 for line in data:
-                    q = line['title'] + ' ' + line['question']
+                    q = line['title'] + ' ' + line['content']
                     q = ' '.join(self.tag.nouns(q))
                     a = line['main_category'] + ' ' + ' '.join(line['sub_category'])
                     a = ' '.join(self.tag.nouns(a))
@@ -66,7 +66,7 @@ class transformer_t2t(text_problems.Text2TextProblem):
     def generate_samples(self, data_dir, tmp_dir, dataset_split):
         data_file_list = [os.path.join(data_dir, file) for file in os.listdir(data_dir) if file.endswith('.json')]
         div = 'train'
-        total = 200
+        total = None
         reader = Reader(
             file_list=data_file_list,
             shuffle=True,
