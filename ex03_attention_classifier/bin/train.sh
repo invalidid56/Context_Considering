@@ -26,7 +26,8 @@ if [ $FILECNT = 0 ] ; then
       --problem=$PROBLEM \
       --hparams_set=$HPARAMS \
       --model=$MODEL \
-      --eval_steps=100
+      --eval_steps=100 \
+      --worker_gpus=4
 
     echo '>>>> End Datagen for Training.'
 else
