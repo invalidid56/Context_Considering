@@ -25,6 +25,7 @@ if [ $FILECNT = 0 ] ; then
       --output_dir=$TMP_DIR \
       --problem=$PROBLEM \
       --hparams_set=$HPARAMS \
+      --hparams='batch_size=1024' \
       --model=$MODEL \
       --eval_steps=100 \
       --worker_gpu=4
