@@ -25,7 +25,7 @@ if [ $FILECNT = 0 ] ; then
       --output_dir=$TMP_DIR \
       --problem=$PROBLEM \
       --hparams_set=$HPARAMS \
-      --model=$MODEL
+      --model=$MODEL \
       --eval_steps=100
 
     echo '>>>> End Datagen for Training.'
