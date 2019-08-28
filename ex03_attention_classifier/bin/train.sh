@@ -15,22 +15,14 @@ TMP_DIR=${EX_HOME}/ex03/tmp_model
 
 mkdir -p  $TMP_DIR
 
-FILECNT=$(ls $TMP_DIR | wc -l)
+python train.py \
+    --data_dir=$DATA_DIR \
+    --output_dir=$TMP_DIR \
+    --problem=$PROBLEM \
+    --hparams_set=$HPARAMS \
+    --hparams='batch_size=1024' \
+    --model=$MODEL \
+    --eval_steps=100 \
+    --worker_gpu=4
 
-if [ $FILECNT = 0 ] ; then
-    echo '>>>> Start Datagen for Training.'
 
-    python train.py \
-      --data_dir=$DATA_DIR \
-      --output_dir=$TMP_DIR \
-      --problem=$PROBLEM \
-      --hparams_set=$HPARAMS \
-      --hparams='batch_size=1024' \
-      --model=$MODEL \
-      --eval_steps=100 \
-      --worker_gpu=4
-
-    echo '>>>> End Datagen for Training.'
-else
-    echo '>>>> Dataset files are already exist in target dir. Check and try datagen again.'
-fi
